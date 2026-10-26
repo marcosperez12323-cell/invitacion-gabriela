@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#d94531">
+<meta name="description" content="Una invitación muy especial para Gabriela. Retira cada sushi del plato para descubrirla.">
+<title>Para Gabriela · Una invitación especial</title>
+<style>
+:root { --red:#d84430; --red-dark:#a82d22; --cream:#f6ebcf; --cream-dark:#e9d6b6; --ink:#222626; --blue:#1e4a5b; --gold:#edba68; }
+* { box-sizing:border-box; }
+html { min-height:100%; background:#292827; }
+body { margin:0; min-height:100dvh; display:flex; justify-content:center; align-items:center; background:#292827; color:var(--cream); -webkit-font-smoothing:antialiased; }
+button,svg { -webkit-tap-highlight-color:transparent; }
+.poster { position:relative; display:flex; flex-direction:column; isolation:isolate; overflow:hidden; width:min(100%,525px); min-height:100dvh; background:var(--red); border:8px solid var(--cream); box-shadow:0 14px 75px #0007; }
+.poster::before { content:""; pointer-events:none; position:absolute; z-index:10; inset:0; opacity:.15; mix-blend-mode:multiply; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.73' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='.8'/%3E%3C/svg%3E"); }
+.poster::after { content:""; position:absolute; z-index:9; pointer-events:none; inset:11px; border:1.5px solid #f6e7be73; }
+.paper-grain { position:absolute; pointer-events:none; inset:0; background:radial-gradient(ellipse at 55% 45%, transparent 40%, #811a131f 100%); z-index:0; }
+.masthead { position:relative; z-index:1; flex:0 0 auto; padding:18px 27px 0; }
+.masthead-line { display:flex; align-items:center; justify-content:space-between; padding-bottom:11px; border-bottom:1.5px solid #f8dfb9a9; font:700 10px/1.1 'Arial Narrow',Arial,sans-serif; letter-spacing:.19em; color:var(--cream); }
+.masthead-line .kanji { font-size:20px; letter-spacing:0; font-weight:500; }
+.masthead-line .mark { font-size:17px; font-weight:400; }
+.title-wrap { position:relative; padding-top:18px; }
+h1 { position:relative; z-index:2; margin:0; color:var(--cream); font-family:Georgia,'Times New Roman',serif; font-weight:900; font-size:clamp(53px,12.4vw,75px); line-height:.91; letter-spacing:-.07em; text-shadow:2px 2px 0 #ae3025; }
+h1 .second { display:block; margin-left:4px; font-size:1.09em; font-style:italic; }
+.sun-badge { position:absolute; right:0; top:19px; width:88px; height:88px; border-radius:50%; background:var(--cream); border:3px solid var(--ink); display:grid; place-items:center; color:var(--red); font-size:40px; font-weight:800; font-family:serif; transform:rotate(10deg); box-shadow:4px 5px 0 #ab2c22; }
+.sun-badge::after { content:""; position:absolute; inset:9px; border:1px solid #cf594a; border-radius:50%; }
+.instruction { display:flex; gap:8px; align-items:center; width:max-content; margin:17px 0 0 4px; padding:8px 13px 7px; color:var(--cream); font:700 11px/1 Arial,sans-serif; letter-spacing:.13em; border:1px solid var(--cream); transform:rotate(-2deg); }
+.instruction .down { display:inline-block; font-size:17px; margin-top:-2px; animation:hintbob 1.6s ease-in-out infinite; }
+@keyframes hintbob { 50% {transform:translateY(4px)} }
+.artwork { position:relative; display:flex; flex:1 1 auto; align-items:center; justify-content:center; min-height:300px; margin:0 8px; z-index:1; }
+.artwork::before { content:""; position:absolute; width:93%; height:74%; left:3.5%; top:14%; border:2px solid #f3d8b375; border-radius:50%; pointer-events:none; transform:rotate(-10deg); }
+#sushi-stage { display:block; width:100%; height:auto; overflow:visible; max-height:500px; touch-action:pan-y; user-select:none; -webkit-user-select:none; }
+.sushi-piece { cursor:grab; outline:none; touch-action:none; }
+.sushi-piece:active { cursor:grabbing; }
+.sushi-piece:focus-visible .focus-ring { opacity:1; }
+.focus-ring { opacity:0; fill:none; stroke:#f6edcc; stroke-width:4; stroke-dasharray:5 7; }
+.sushi-piece .piece-art { transform-box:fill-box; transform-origin:center; filter:drop-shadow(4px 6px 1px #12171952); }
+.sushi-piece.dragging .piece-art { filter:drop-shadow(7px 12px 3px #12171965); }
+.sushi-piece.leaving { pointer-events:none; }
+.sushi-piece.leaving .piece-art { animation:takeaway .48s cubic-bezier(.23,.85,.36,1) forwards; }
+@keyframes takeaway { 0% {transform:translate(0,0) rotate(0deg) scale(1);opacity:1} 100% {transform:translate(12px,-115px) rotate(29deg) scale(.55);opacity:0} }
+#hidden-invitation { opacity:.92; }
+#hidden-invitation .invite-line { font-family:Georgia,'Times New Roman',serif; font-weight:900; fill:#ab3428; letter-spacing:1px; }
+#hidden-invitation .invite-line.big { font-size:32px; }
+#hidden-invitation .invite-line.mid { font-size:27px; }
+#hidden-invitation .invite-line.small { font-size:24px; }
+#hidden-invitation .invite-accent { fill:none; stroke:#275261; stroke-width:2.5; opacity:.55; stroke-linecap:round; }
+.illustration-label { position:absolute; bottom:3px; font:700 9px/1 Arial,sans-serif; letter-spacing:.22em; color:#f7e7c8b8; }
+.closing { flex:0 0 auto; position:relative; z-index:2; background:var(--cream); color:var(--ink); padding:16px 27px max(19px, env(safe-area-inset-bottom)); border-top:8px solid var(--ink); }
+.closing:before { content:""; position:absolute; left:0; right:0; top:-13px; border-top:2px solid var(--cream); }
+.close-topline { display:flex; justify-content:space-between; align-items:center; color:var(--red-dark); font:900 10px Arial,sans-serif; letter-spacing:.18em; margin-bottom:9px; }
+.closing h2 { font-family:Georgia,'Times New Roman',serif; font-size:clamp(28px,7.9vw,39px); line-height:1.12; letter-spacing:-.055em; margin:0; padding-right:37px; font-weight:900; }
+.closing h2 .sushi-word { color:var(--red); font-style:italic; white-space:nowrap; }
+.closing .stamp { position:absolute; right:27px; top:30px; display:grid; place-items:center; width:28px; height:28px; color:var(--red-dark); border:3px solid var(--red-dark); border-radius:50%; font:600 16px serif; transform:rotate(-14deg); opacity:.85; }
+.closing .rule { margin-top:27px; height:4px; background:var(--ink); border-top:1px solid var(--cream); box-shadow:0 3px 0 var(--ink); }
+.replay { display:none; margin-top:16px; padding:10px 16px; border:2px solid var(--ink); background:var(--red); color:#fff1d8; font:700 12px/1 Arial,sans-serif; letter-spacing:.11em; cursor:pointer; box-shadow:3px 3px 0 var(--ink); }
+.poster.complete .replay { display:inline-block; }
+.sr-only {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media (min-width:600px){body{padding:22px}.poster { min-height:min(960px,calc(100dvh - 44px)); aspect-ratio:9/16; } .masthead{padding-top:25px}.artwork{min-height:300px}.closing{padding-bottom:27px} }
+@media (max-width:380px) { .masthead{padding:15px 21px 0}.sun-badge{width:71px;height:71px;font-size:31px}.title-wrap{padding-top:17px}h1{font-size:clamp(49px,13vw,58px)}.artwork{margin:0 3px;min-height:275px}.closing{padding:17px 21px max(19px,env(safe-area-inset-bottom))}.closing h2{font-size:28px}.closing .stamp{right:21px;top:30px;width:28px;height:28px;font-size:16px} }
+@media (max-height:700px) and (max-width:599px) { .masthead{padding-top:11px}.title-wrap{padding-top:11px}h1{font-size:clamp(43px,11vw,60px)}.instruction{margin-top:10px}.artwork{min-height:235px}.closing{padding-top:13px;padding-bottom:15px}.closing .rule{margin-top:27px} }
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important} }
+</style>
+</head>
+<body>
+<main class="poster" id="poster">
+  <div class="paper-grain" aria-hidden="true"></div>
+  <header class="masthead">
+    <div class="masthead-line"><span class="kanji" lang="ja">招待状</span><span>UNA INVITACIÓN ESPECIAL</span><span class="mark">✳</span></div>
+    <div class="title-wrap">
+      <h1>¡Hola <span class="second">Gabriela!</span></h1>
+      <div class="sun-badge" lang="ja" aria-hidden="true">福</div>
+    </div>
+    <p class="instruction"><span aria-hidden="true">✳</span> Quitar el sushi <span class="down" aria-hidden="true">↓</span></p>
+  </header>
+  <div class="artwork">
+    <svg id="sushi-stage" viewBox="0 0 600 510" role="group" aria-label="Plato con siete piezas de sushi. Toca o arrastra cada pieza para quitarla." xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="soft-shadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter>
+        <pattern id="bowl-hatch" width="22" height="22" patternUnits="userSpaceOnUse" patternTransform="rotate(42)"><path d="M0 0 V22" stroke="#205365" stroke-width="1.4" opacity=".14"/></pattern>
+        <pattern id="rice-streak" width="19" height="17" patternUnits="userSpaceOnUse"><path d="M3 3l5 -2M10 12l6 -2" stroke="#9f9280" stroke-width="1.5" stroke-linecap="round" opacity=".55"/></pattern>
+        <clipPath id="salmon-clip"><path d="M-58 -11Q-48 -48 5 -48Q49 -51 65 -16L61 13Q14 32 -45 16Z"/></clipPath>
+        <clipPath id="tuna-clip"><path d="M-61 -10Q-52 -47 -4 -45Q47 -49 63 -9L57 14Q2 30 -50 16Z"/></clipPath>
+        <g id="salmon-nigiri">
+          <path d="M-63 -4Q-60 -38 -27 -40L29 -42Q61 -36 64 -8L61 24Q43 44 2 46Q-43 44 -64 19Z" fill="#f4e9d0" stroke="#302b26" stroke-width="4"/>
+          <path d="M-60 -3Q-57 -32 -24 -33L33 -33Q56 -28 58 -7L57 20Q35 36 0 39Q-45 35 -60 16Z" fill="url(#rice-streak)" opacity=".86"/>
+          <path d="M-58 -11Q-48 -48 5 -48Q49 -51 65 -16L61 13Q14 32 -45 16Z" fill="#ef7750" stroke="#402723" stroke-width="4"/>
+          <g clip-path="url(#salmon-clip)" fill="none" stroke="#ffd09a" stroke-width="7" opacity=".95">
+            <path d="M-62 -34Q-40 -4 -53 30M-38 -51Q-9 -19 -25 30M-10 -58Q23 -21 7 30M22 -58Q48 -25 42 23M48 -46Q68 -18 64 12"/>
+          </g>
+          <path d="M-46 11Q0 30 53 11" fill="none" stroke="#b8482d" stroke-width="3" opacity=".6"/>
+          <path d="M-39 -33Q-19 -42 7 -41" stroke="#ffdfaa" stroke-width="4" fill="none" stroke-linecap="round"/>
+        </g>
+        <g id="tuna-nigiri">
+          <path d="M-61 -7Q-63 -40 -28 -42L31 -42Q65 -35 66 -5L60 25Q38 45 -4 43Q-44 42 -62 22Z" fill="#f4ead4" stroke="#342a25" stroke-width="4"/>
+          <path d="M-59 -6Q-53 -31 -20 -32L33 -31Q55 -24 56 -6L54 26Q-4 46 -56 18Z" fill="url(#rice-streak)"/>
+          <path d="M-61 -10Q-52 -47 -4 -45Q47 -49 63 -9L57 14Q2 30 -50 16Z" fill="#b72d2e" stroke="#382323" stroke-width="4"/>
+          <g clip-path="url(#tuna-clip)" fill="none" stroke="#ec6e63" stroke-width="2.8" opacity=".9">
+            <path d="M-63 -28Q-19 -17 7 23M-36 -48Q-4 -12 22 23M1 -53Q23 -18 39 20M28 -51Q47 -20 55 12"/>
+          </g>
+          <path d="M-51 5Q8 25 52 6" fill="none" stroke="#842324" stroke-width="3" opacity=".7"/>
+        </g>
+        <g id="maki">
+          <ellipse cx="0" cy="7" rx="52" ry="46" fill="#1b2627" stroke="#181919" stroke-width="5"/>
+          <ellipse cx="0" cy="-1" rx="41" ry="37" fill="#f5ead2" stroke="#b8a88e" stroke-width="2.5"/>
+          <ellipse cx="0" cy="-1" rx="41" ry="37" fill="url(#rice-streak)"/>
+          <path d="M-25 -11Q-12 -29 4 -14L13 4Q6 18 -12 14L-26 4Z" fill="#e85c3b" stroke="#693124" stroke-width="2.5"/>
+          <path d="M5 -22Q29 -17 26 -1L9 13L-3 0Z" fill="#6f996d" stroke="#365a49" stroke-width="2.5"/>
+          <path d="M-4 9Q13 -1 20 16Q1 28 -18 18Z" fill="#efb94e" stroke="#98733c" stroke-width="2"/>
+          <path d="M-30 -18Q-23 -33 -12 -30" stroke="#fcf7dc" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M-47 -4Q-49 22 -29 34" stroke="#65807a" stroke-width="2" stroke-linecap="round" opacity=".6" fill="none"/>
+        </g>
+        <g id="shrimp-nigiri">
+          <path d="M-61 -6Q-55 -40 -23 -42L34 -40Q63 -30 64 -6L58 26Q33 46 -4 44Q-46 43 -61 19Z" fill="#f3e8d0" stroke="#342b29" stroke-width="4"/>
+          <path d="M-56 -13Q-48 -45 -5 -47Q38 -52 60 -12L56 10Q2 33 -51 12Z" fill="#ffe4c1" stroke="#40312a" stroke-width="3"/>
+          <path d="M-55 -14Q-49 -42 -27 -43L-12 19L-24 23Q-51 8 -55 -14ZM-4 -48Q8 -50 21 -45L31 21L13 26ZM37 -40Q51 -30 60 -12L56 9L44 18Z" fill="#d95c45"/>
+          <path d="M-41 -21Q-30 -30 -22 -32M2 -34Q10 -39 17 -36M39 -28Q48 -24 53 -15" stroke="#fff0d2" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <path d="M-56 20Q0 40 56 19" stroke="#998d76" stroke-width="2" stroke-dasharray="3 6" fill="none"/>
+        </g>
+        <g id="tamago-nigiri">
+          <path d="M-60 -7Q-55 -37 -25 -39L27 -39Q60 -30 64 -5L60 28Q34 42 -1 42Q-45 41 -60 20Z" fill="#f4ead4" stroke="#302b26" stroke-width="4"/>
+          <path d="M-58 -14Q-56 -46 -23 -48L27 -48Q58 -47 62 -13L57 17Q0 32 -55 15Z" fill="#f6bf56" stroke="#4e3320" stroke-width="4"/>
+          <path d="M-50 -28Q-21 -42 23 -37M-44 7Q2 19 51 3" stroke="#fce399" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M-13 -46L13 -46L14 28L-13 28Z" fill="#1e3334" stroke="#162222" stroke-width="2"/>
+          <path d="M-9 -39V22" stroke="#5b6e62" stroke-width="2" opacity=".8"/>
+          <path d="M-54 25Q0 46 57 22" stroke="#8e8b7b" stroke-width="2" stroke-dasharray="3 7" fill="none"/>
+        </g>
+      </defs>
+      <!-- Ornamental sun, waves and little Japanese print marks -->
+      <g opacity=".38" fill="none" stroke="#f9deba" stroke-width="2.2">
+        <path d="M45 105c38 -35 74 -35 112 0M38 119c38 -35 82 -35 121 0M439 405c38 -35 77 -35 113 0M435 419c40 -34 84 -34 121 0"/>
+        <path d="M35 438h75M35 450h94M480 59h70M499 70h52"/>
+      </g>
+      <g transform="translate(43 220) rotate(-9)"><rect x="0" y="0" width="41" height="113" rx="1" fill="#f0dfb5" stroke="#302c29" stroke-width="3"/><text x="22" y="19" text-anchor="middle" font-family="serif" font-size="27" fill="#a82c24" writing-mode="vertical-rl">寿司日和</text></g>
+      <g transform="translate(505 80) rotate(23)"><rect x="0" y="0" width="11" height="147" rx="5" fill="#e8b768" stroke="#382821" stroke-width="3"/><path d="M3 7v123" stroke="#f8d69f" stroke-width="2"/><rect x="23" y="-5" width="11" height="147" rx="5" fill="#e8b768" stroke="#382821" stroke-width="3"/><path d="M27 4v126" stroke="#f8d69f" stroke-width="2"/></g>
+      <!-- Cast shadow and hand-printed ceramic plate -->
+      <ellipse cx="303" cy="276" rx="229" ry="177" fill="#531e1b" opacity=".35" filter="url(#soft-shadow)"/>
+      <ellipse cx="295" cy="256" rx="232" ry="175" fill="#252827" stroke="#17191a" stroke-width="8"/>
+      <ellipse cx="295" cy="247" rx="225" ry="166" fill="#e6dec5" stroke="#254352" stroke-width="9"/>
+      <ellipse cx="295" cy="247" rx="201" ry="144" fill="#f3e8d0" stroke="#234859" stroke-width="6"/>
+      <ellipse cx="295" cy="247" rx="194" ry="137" fill="url(#bowl-hatch)"/>
+      <!-- Illustration and invitation hidden beneath sushi -->
+      <g fill="none" stroke="#2a5764" opacity=".42">
+        <path d="M161 324L233 217L266 261L338 173L444 326" stroke-width="4"/>
+        <path d="M202 326L247 266L269 283M286 253L337 185L381 250" stroke-width="2"/>
+        <circle cx="295" cy="252" r="112" stroke-width="2" stroke-dasharray="2 9"/>
+      </g>
+      <g id="hidden-invitation" aria-hidden="true">
+        <ellipse cx="295" cy="248" rx="138" ry="96" fill="#f4e7cc" opacity=".72"/>
+        <path class="invite-accent" d="M196 198c17-18 35-28 54-31M375 198c-14-16-32-25-49-29M213 315c49-10 120-10 166 0"/>
+        <text x="295" y="214" text-anchor="middle" class="invite-line big">¿Vamos</text>
+        <text x="295" y="250" text-anchor="middle" class="invite-line mid">a escalar</text>
+        <text x="295" y="285" text-anchor="middle" class="invite-line small">y por un sushi?</text>
+      </g>
+      <!-- Seven individual tactile sushi illustrations -->
+      <g class="sushi-piece" data-name="salmón" data-origin="translate(185 166) rotate(-18)" transform="translate(185 166) rotate(-18)" role="button" tabindex="0" aria-label="Quitar el primer sushi de salmón"><g class="piece-art"><use href="#salmon-nigiri"/></g><ellipse class="focus-ring" rx="77" ry="61"/></g>
+      <g class="sushi-piece" data-name="maki" data-origin="translate(301 152) rotate(14)" transform="translate(301 152) rotate(14)" role="button" tabindex="0" aria-label="Quitar un maki"><g class="piece-art"><use href="#maki"/></g><ellipse class="focus-ring" rx="63" ry="58"/></g>
+      <g class="sushi-piece" data-name="atún" data-origin="translate(409 194) rotate(24)" transform="translate(409 194) rotate(24)" role="button" tabindex="0" aria-label="Quitar el sushi de atún"><g class="piece-art"><use href="#tuna-nigiri"/></g><ellipse class="focus-ring" rx="78" ry="59"/></g>
+      <g class="sushi-piece" data-name="maki" data-origin="translate(181 282) rotate(-15)" transform="translate(181 282) rotate(-15)" role="button" tabindex="0" aria-label="Quitar el segundo maki"><g class="piece-art"><use href="#maki"/></g><ellipse class="focus-ring" rx="63" ry="58"/></g>
+      <g class="sushi-piece" data-name="camarón" data-origin="translate(294 260) rotate(-4)" transform="translate(294 260) rotate(-4)" role="button" tabindex="0" aria-label="Quitar el sushi de camarón"><g class="piece-art"><use href="#shrimp-nigiri"/></g><ellipse class="focus-ring" rx="77" ry="60"/></g>
+      <g class="sushi-piece" data-name="salmón" data-origin="translate(409 307) rotate(9)" transform="translate(409 307) rotate(9)" role="button" tabindex="0" aria-label="Quitar el segundo sushi de salmón"><g class="piece-art"><use href="#salmon-nigiri"/></g><ellipse class="focus-ring" rx="77" ry="60"/></g>
+      <g class="sushi-piece" data-name="tamagoyaki" data-origin="translate(288 357) rotate(10)" transform="translate(288 357) rotate(10)" role="button" tabindex="0" aria-label="Quitar el sushi de tortilla japonesa"><g class="piece-art"><use href="#tamago-nigiri"/></g><ellipse class="focus-ring" rx="77" ry="59"/></g>
+      <g fill="none" stroke="#f5e3be" stroke-linecap="round" opacity=".85">
+        <path d="M94 376c-6 25 -2 42 15 53M104 379c-3 17 2 30 15 39" stroke-width="3" stroke-dasharray="4 8"/>
+        <path d="M466 360c22 9 35 30 31 54" stroke-width="3" stroke-dasharray="3 8"/>
+      </g>
+    </svg>
+    <span class="illustration-label" aria-hidden="true">一 つ ず つ · ONE BY ONE</span>
+  </div>
+  <footer class="closing">
+    <div class="close-topline"><span>PLANES BONITOS</span><span lang="ja">寿司 · 冒険</span></div>
+    <span class="stamp" lang="ja" aria-hidden="true">愛</span>
+    <button class="replay" id="replay" type="button">↺ VOLVER A SERVIR</button>
+    <div class="rule" aria-hidden="true"></div>
+    <p class="sr-only" role="status" id="status" aria-live="polite">Hay siete piezas de sushi para retirar.</p>
+  </footer>
+</main>
+<script>
+(() => {
+  const poster = document.getElementById('poster');
+  const stage = document.getElementById('sushi-stage');
+  const pieces = [...document.querySelectorAll('.sushi-piece')];
+  const replay = document.getElementById('replay');
+  const live = document.getElementById('status');
+  let taken = 0;
+  let gesture = null;
+
+  function svgPoint(event) {
+    const point = stage.createSVGPoint();
+    point.x = event.clientX; point.y = event.clientY;
+    return point.matrixTransform(stage.getScreenCTM().inverse());
+  }
+  function removePiece(piece) {
+    if (piece.dataset.taken === 'true') return;
+    piece.dataset.taken = 'true';
+    piece.classList.remove('dragging');
+    piece.classList.add('leaving');
+    piece.setAttribute('aria-disabled','true');
+    piece.setAttribute('tabindex','-1');
+    taken += 1;
+    if (taken === pieces.length) {
+      poster.classList.add('complete');
+      live.textContent = '¡Quitaste todo el sushi! ¿Vamos a escalar y por un sushi?';
+      setTimeout(() => replay.focus({preventScroll:true}), 540);
+    } else {
+      live.textContent = `Quitaste una pieza. Quedan ${pieces.length - taken} piezas de sushi.`;
+    }
+  }
+  pieces.forEach(piece => {
+    piece.addEventListener('pointerdown', event => {
+      if (piece.dataset.taken === 'true') return;
+      if (event.pointerType === 'mouse' && event.button !== 0) return;
+      event.preventDefault();
+      const p = svgPoint(event);
+      gesture = {piece, pointerId:event.pointerId, start:p, x:p.x, y:p.y, moved:false};
+      piece.classList.add('dragging');
+      piece.parentNode.appendChild(piece);
+      piece.setPointerCapture(event.pointerId);
+    });
+    piece.addEventListener('pointermove', event => {
+      if (!gesture || gesture.piece !== piece || gesture.pointerId !== event.pointerId) return;
+      const p = svgPoint(event);
+      const dx = p.x-gesture.start.x, dy = p.y-gesture.start.y;
+      if (Math.hypot(dx,dy) > 7) gesture.moved = true;
+      piece.setAttribute('transform', `${piece.dataset.origin} translate(${dx.toFixed(1)} ${dy.toFixed(1)})`);
+    });
+    piece.addEventListener('pointerup', event => {
+      if (!gesture || gesture.piece !== piece || gesture.pointerId !== event.pointerId) return;
+      gesture = null;
+      removePiece(piece); // A tap picks it up; a drag physically takes it off the plate.
+    });
+    piece.addEventListener('pointercancel', event => {
+      if (!gesture || gesture.piece !== piece || gesture.pointerId !== event.pointerId) return;
+      gesture = null;
+      piece.classList.remove('dragging');
+      piece.setAttribute('transform',piece.dataset.origin);
+    });
+    piece.addEventListener('keydown', event => {
+      if ((event.key === 'Enter' || event.key === ' ') && piece.dataset.taken !== 'true') {
+        event.preventDefault();
+        removePiece(piece);
+      }
+    });
+  });
+  replay.addEventListener('click', () => {
+    poster.classList.remove('complete');
+    taken = 0; gesture = null;
+    pieces.forEach(piece => {
+      piece.dataset.taken = 'false';
+      piece.classList.remove('leaving','dragging');
+      piece.setAttribute('transform',piece.dataset.origin);
+      piece.setAttribute('tabindex','0');
+      piece.removeAttribute('aria-disabled');
+    });
+    live.textContent = 'Hay siete piezas de sushi para retirar.';
+    pieces[0].focus({preventScroll:true});
+  });
+})();
+</script>
+</body>
+</html>
